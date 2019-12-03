@@ -32,7 +32,7 @@ const intersections = new Set([...wireOneNodes].filter(node => wireTwoNodes.has(
 
 const closestIntersection = [...intersections].reduce((minDistance, node) => {
     const coords = node.split(',')
-    const manhattanDistance = Math.abs(coords[0]) +Math.abs(coords[1])
+    const manhattanDistance = Math.abs(coords[0]) + Math.abs(coords[1])
 
     return (!minDistance || manhattanDistance < minDistance) ? manhattanDistance : minDistance
 }, false)

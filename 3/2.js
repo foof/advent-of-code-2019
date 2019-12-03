@@ -38,8 +38,6 @@ const intersections = new Set([...wireOneNodeData.nodes].filter(node => wireTwoN
 
 const intersectionWithLeastCombinedSteps = [...intersections].reduce((intersection, node) => {
     const steps = wireOneNodeData.coordSteps[node] + wireTwoNodeData.coordSteps[node]
-    console.log('node', { node, steps })
-    console.log('intersection', intersection)
 
     return (!intersection || intersection.steps > steps) ? { node, steps } : intersection
 }, undefined)

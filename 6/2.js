@@ -36,11 +36,10 @@ function getParents(node, nodes) {
 }
 
 myParents = getParents('YOU', nodes)
-console.log(myParents)
 
-let santasParent = nodes['SAN']
-while (!myParents.includes(santasParent)) {
-    santasParent = nodes[santasParent]
+let closestParent = nodes['SAN']
+while (!myParents.includes(closestParent)) {
+    closestParent = nodes[closestParent]
 }
 
-console.log(distanceToParentNode(nodes['SAN'], santasParent, nodes) + distanceToParentNode(nodes['YOU'], santasParent, nodes))
+console.log(distanceToParentNode(nodes['SAN'], closestParent, nodes) + distanceToParentNode(nodes['YOU'], closestParent, nodes))

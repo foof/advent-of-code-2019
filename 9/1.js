@@ -16,7 +16,6 @@ function getAddress(memory, pos, mode, relativeBase) {
 function* intCodeProcessor(memory, input) {
     let i = 0
     let relativeBase = 0
-    let output = []
     while (true) {
         let command = [...('' + memory[i]).padStart(5, '0')]
         let opCode = +(command[3] + command[4])

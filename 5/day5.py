@@ -6,48 +6,45 @@ class IntCode:
         self.memory = memory
         self.ip = 0
         self.seed = seed
+
+    def get_parameter_address(self, inst, pos):
+        mode = int(inst[3-pos])
+        if mode:
+            return self.ip+pos
+        elif self.ip+pos < len(self.memory):
+            return self.memory[self.ip+pos]
+        return None
     
     def parse_instruction(self, inst):
         inst = inst.rjust(5, '0')
         op = int(inst[-2:])
-
-        mode1 = int(inst[2])
-        mode2 = int(inst[1])
-        mode3 = int(inst[0])
-
-        p1, p2, p3 = self.ip+1, self.ip+2, self.ip+3
-        
-        p1 = self.memory[self.ip+1] if not mode1 and self.ip+1 < len(self.memory) else p1
-        p2 = self.memory[self.ip+2] if not mode2 and self.ip+2 < len(self.memory) else p2
-        p3 = self.memory[self.ip+3] if not mode3 and self.ip+3 < len(self.memory) else p3
-
-        return op, p1, p2, p3
+        return op, self.get_parameter_address(inst, 1), self.get_parameter_address(inst, 2), self.get_parameter_address(inst, 3)
 
     def run(self):
         while True:
-            op, p1, p2, p3 = self.parse_instruction(str(self.memory[self.ip]))
+            op, pa1, pa2, pa3 = self.parse_instruction(str(self.memory[self.ip]))
 
             if op == 1:
-                self.memory[p3] = self.memory[p1] + self.memory[p2]
+                self.memory[pa3] = self.memory[pa1] + self.memory[pa2]
                 self.ip += 4
             elif op == 2:
-                self.memory[p3] = self.memory[p1] * self.memory[p2]
+                self.memory[pa3] = self.memory[pa1] * self.memory[pa2]
                 self.ip += 4
             elif op == 3:
-                self.memory[p1] = self.seed
+                self.memory[pa1] = self.seed
                 self.ip += 2
             elif op == 4:
-                yield self.memory[p1]
+                yield self.memory[pa1]
                 self.ip += 2
             elif op == 5:
-                self.ip = self.memory[p2] if self.memory[p1] else self.ip + 3
+                self.ip = self.memory[pa2] if self.memory[pa1] else self.ip + 3
             elif op == 6:
-                self.ip = self.memory[p2] if not self.memory[p1] else self.ip + 3
+                self.ip = self.memory[pa2] if not self.memory[pa1] else self.ip + 3
             elif op == 7:
-                self.memory[p3] = 1 if self.memory[p1] < self.memory[p2] else 0
+                self.memory[pa3] = 1 if self.memory[pa1] < self.memory[pa2] else 0
                 self.ip += 4
             elif op == 8:
-                self.memory[p3] = 1 if self.memory[p1] == self.memory[p2] else 0
+                self.memory[pa3] = 1 if self.memory[pa1] == self.memory[pa2] else 0
                 self.ip += 4
             elif op == 99:
                 break
